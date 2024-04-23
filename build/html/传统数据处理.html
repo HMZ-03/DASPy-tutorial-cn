@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>传统数据处理 &mdash; DASPy中文教程 1.0.0 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="可视化" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html" />
+    <link rel="prev" title="开始" href="%E5%BC%80%E5%A7%8B.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DASPy中文教程
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="%E5%AE%89%E8%A3%85.html">安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%BC%80%E5%A7%8B.html">开始</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">传统数据处理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">预处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">数据滤波</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">频域属性</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html">可视化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BF%A1%E9%81%93%E5%88%86%E6%9E%90.html">信道分析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E5%8E%BB%E5%99%AA.html">数据去噪</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%B3%A2%E5%9C%BA%E5%88%86%E8%A7%A3.html">波场分解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%BA%94%E5%8F%98-%E9%80%9F%E5%BA%A6%E8%BD%AC%E6%8D%A2.html">应变-速度转换</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DASPy中文教程</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">传统数据处理</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/传统数据处理.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>传统数据处理<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<p>DASPy集成了 <a class="reference internal" href="#id2"><span class="std std-ref">预处理</span></a> 、 <a class="reference internal" href="#id4"><span class="std std-ref">数据滤波</span></a> 和 <a class="reference internal" href="#id6"><span class="std std-ref">频域属性</span></a> 分析三个模块，以满足传统的数据处理需求。</p>
+<section id="id2">
+<span id="id3"></span><h2>预处理<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>DASPy集成了大量常用的DAS预处理工具，包括：相位-应变转换 <code class="docutils literal notranslate"><span class="pre">phase2strain</span></code> 、归一化 <code class="docutils literal notranslate"><span class="pre">normalization</span></code> 、去均值 <code class="docutils literal notranslate"><span class="pre">demeaning</span></code> 、去趋势 <code class="docutils literal notranslate"><span class="pre">detrending</span></code> 、信道叠加 <code class="docutils literal notranslate"><span class="pre">stacking</span></code> 、余弦尖灭 <code class="docutils literal notranslate"><span class="pre">cosine_taper</span></code> 、降采样 <code class="docutils literal notranslate"><span class="pre">downsampling</span></code> 、数据切割 <code class="docutils literal notranslate"><span class="pre">trimming</span></code> 、数据扩展 <code class="docutils literal notranslate"><span class="pre">padding</span></code> 、时域积分 <code class="docutils literal notranslate"><span class="pre">time_integration</span></code> 和时域微分 <code class="docutils literal notranslate"><span class="pre">time_differential</span></code> 。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">detrending</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>如有需要，在对数据做处理时，会自动更改相应的属性：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">data_type</span>
+<span class="go">&#39;strain rate&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">time_integration</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">data_type</span>
+<span class="go">&#39;strain&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<span id="id5"></span><h2>数据滤波<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<p>DASPy包含了常用的滤波方法，包括带通滤波 <code class="docutils literal notranslate"><span class="pre">bandpass</span></code> 、带阻滤波 <code class="docutils literal notranslate"><span class="pre">bandstop</span></code> 、低通滤波 <code class="docutils literal notranslate"><span class="pre">lowpass</span></code> 、高通滤波 <code class="docutils literal notranslate"><span class="pre">highpass</span></code> 、波形包络 <code class="docutils literal notranslate"><span class="pre">envelope</span></code> 和II型切比雪夫低通滤波 <code class="docutils literal notranslate"><span class="pre">lowpass_cheby_2</span></code> （主要用于降采样前的低通滤波）：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">bandpass</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<span id="id7"></span><h2>频域属性<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<p>DASPy支持的频域属性分析包括频谱（x-t谱）、时频谱（f-t）谱和频率-波数（f-k）谱，分别使用 <code class="docutils literal notranslate"><span class="pre">spectrum</span></code> 、 <code class="docutils literal notranslate"><span class="pre">spectrogram</span></code> 、 <code class="docutils literal notranslate"><span class="pre">fk-transform</span></code> 方法计算。其中 <code class="docutils literal notranslate"><span class="pre">spectrogram</span></code> 默认计算所有道的平均时频谱，可使用 <code class="docutils literal notranslate"><span class="pre">xmin</span></code> 、 <code class="docutils literal notranslate"><span class="pre">xmax</span></code> 参数限制计算平均时频谱的起始道和结尾道：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">spectrum</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Zxx</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">spectrogram</span><span class="p">(</span><span class="n">xmin</span><span class="o">=</span><span class="mi">2600</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">2620</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fk</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">fk_transform</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>若仅需绘制这三种频域谱，无需输出计算结果，则可直接使用 <code class="docutils literal notranslate"><span class="pre">plot</span></code> 方法绘制，详见 <a class="reference internal" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html"><span class="doc">可视化</span></a> 。</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="%E5%BC%80%E5%A7%8B.html" class="btn btn-neutral float-left" title="开始" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E5%8F%AF%E8%A7%86%E5%8C%96.html" class="btn btn-neutral float-right" title="可视化" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2024, Minzhe Hu.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

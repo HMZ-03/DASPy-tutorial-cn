@@ -1,0 +1,49 @@
+传统数据处理
+=============================================
+
+DASPy集成了 :ref:`预处理` 、 :ref:`数据滤波` 和 :ref:`频域属性` 分析三个模块，以满足传统的数据处理需求。
+
+
+.. _预处理:
+
+预处理
+------------------------------
+
+DASPy集成了大量常用的DAS预处理工具，包括：相位-应变转换 ``phase2strain`` 、归一化 ``normalization`` 、去均值 ``demeaning`` 、去趋势 ``detrending`` 、信道叠加 ``stacking`` 、余弦尖灭 ``cosine_taper`` 、降采样 ``downsampling`` 、数据切割 ``trimming`` 、数据扩展 ``padding`` 、时域积分 ``time_integration`` 和时域微分 ``time_differential`` 。
+
+    >>> from daspy import read
+    >>> sec = read()
+    >>> sec.detrending()
+
+如有需要，在对数据做处理时，会自动更改相应的属性：
+
+    >>> sec.data_type
+    'strain rate'
+    >>> sec.time_integration()
+    >>> sec.data_type
+    'strain'
+
+
+.. _数据滤波:
+
+数据滤波
+------------------------------
+
+DASPy包含了常用的滤波方法，包括带通滤波 ``bandpass`` 、带阻滤波 ``bandstop`` 、低通滤波 ``lowpass`` 、高通滤波 ``highpass`` 、波形包络 ``envelope`` 和II型切比雪夫低通滤波 ``lowpass_cheby_2`` （主要用于降采样前的低通滤波）：
+
+    >>> sec.bandpass(1, 15)
+
+
+.. _频域属性:
+
+频域属性
+------------------------------
+
+DASPy支持的频域属性分析包括频谱（x-t谱）、时频谱（f-t）谱和频率-波数（f-k）谱，分别使用 ``spectrum`` 、 ``spectrogram`` 、 ``fk-transform`` 方法计算。其中 ``spectrogram`` 默认计算所有道的平均时频谱，可使用 ``xmin`` 、 ``xmax`` 参数限制计算平均时频谱的起始道和结尾道：
+
+    >>> spec, f = sec.spectrum()
+    >>> Zxx, f, t = sec.spectrogram(xmin=2600, xmax=2620)
+    >>> fk, f, k = sec.fk_transform()
+
+若仅需绘制这三种频域谱，无需输出计算结果，则可直接使用 ``plot`` 方法绘制，详见 :doc:`可视化` 。
+

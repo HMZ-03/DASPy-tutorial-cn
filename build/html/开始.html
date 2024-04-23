@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>开始 &mdash; DASPy中文教程 1.0.0 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="传统数据处理" href="%E4%BC%A0%E7%BB%9F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html" />
+    <link rel="prev" title="安装" href="%E5%AE%89%E8%A3%85.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DASPy中文教程
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="%E5%AE%89%E8%A3%85.html">安装</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">开始</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">读取数据</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#section">Section类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dasdatetime">DASDateTime类</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BC%A0%E7%BB%9F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">传统数据处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html">可视化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BF%A1%E9%81%93%E5%88%86%E6%9E%90.html">信道分析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E5%8E%BB%E5%99%AA.html">数据去噪</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%B3%A2%E5%9C%BA%E5%88%86%E8%A7%A3.html">波场分解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%BA%94%E5%8F%98-%E9%80%9F%E5%BA%A6%E8%BD%AC%E6%8D%A2.html">应变-速度转换</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DASPy中文教程</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">开始</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/开始.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>开始<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="id2">
+<h2>读取数据<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">read函数</span></code> 用于读取多类型的DAS数据文件，它支持读取.h5、.tdms、.segy/.sgy文件，还支持读取存储为 .pkl文件的 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 类实例（见下）。</p>
+<p>在默认情况下，函数将输出包含数据和元数据的 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 类实例。可设置 <code class="docutils literal notranslate"><span class="pre">output_type='array'</span></code> 以输出数据为 <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> 格式，此时将以 <code class="docutils literal notranslate"><span class="pre">dict</span></code> 格式输出元数据。设置 <code class="docutils literal notranslate"><span class="pre">ch1</span></code> 或/和 <code class="docutils literal notranslate"><span class="pre">ch2</span></code> 可限制读取的信道范围。</p>
+<p>读取示例波形为 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 实例（推荐）或 <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> 和 <code class="docutils literal notranslate"><span class="pre">dict</span></code> ：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;array&#39;</span><span class="p">,</span> <span class="n">ch1</span><span class="o">=</span><span class="mi">2700</span><span class="p">,</span> <span class="n">ch2</span><span class="o">=</span><span class="mi">2800</span><span class="p">)</span> <span class="c1"># 设置信道范围</span>
+</pre></div>
+</div>
+</section>
+<section id="section">
+<h2>Section类<a class="headerlink" href="#section" title="Permalink to this heading"></a></h2>
+<p>DASPy的功能可以通过调用函数（面向过程）实现，也可以通过类的方法（面向对象）实现。我们推荐面向对象的方式，对DAS数据体的类 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 类进行操作。DASPy中的所有面向用户的函数和类的方法都同名，且为名词（如 <code class="docutils literal notranslate"><span class="pre">normalization</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Section.normalization</span></code> ）.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Section</span></code> 类的属性保存了该DAS数据以及头段信，其中波形数据 <code class="docutils literal notranslate"><span class="pre">data</span></code> ，道间距 <code class="docutils literal notranslate"><span class="pre">dx</span></code> 、采样率 <code class="docutils literal notranslate"><span class="pre">fs</span></code> 是必须设置的（但可以暂时设置为 <code class="docutils literal notranslate"><span class="pre">None</span></code> ）；起始道号 <code class="docutils literal notranslate"><span class="pre">start_channel</span></code> 、起始距离 <code class="docutils literal notranslate"><span class="pre">start_distance</span></code> 、起始时间 <code class="docutils literal notranslate"><span class="pre">start_time</span></code> 在未设置时默认为0；事件起始时间 <code class="docutils literal notranslate"><span class="pre">origin_time</span></code> 、标距长度 <code class="docutils literal notranslate"><span class="pre">gauge_length</span></code> 、数据类型 <code class="docutils literal notranslate"><span class="pre">data_type</span></code> 、数据尺度 <code class="docutils literal notranslate"><span class="pre">scale</span></code> 、阵列几何 <code class="docutils literal notranslate"><span class="pre">geometry</span></code> 、拐点道号 <code class="docutils literal notranslate"><span class="pre">turning_channels</span></code> 、其他头段信息 <code class="docutils literal notranslate"><span class="pre">headers</span></code> 可不设置。</p>
+<p>当 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 实例转换为 <code class="docutils literal notranslate"><span class="pre">str</span></code> 类型时会自动格式化输出，如调用 <code class="docutils literal notranslate"><span class="pre">print</span></code> 时：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+<span class="go">              data: shape(500, 5000)</span>
+<span class="go">                dx: 1 m</span>
+<span class="go">                fs: 100.0 Hz</span>
+<span class="go">     start_channel: 2500</span>
+<span class="go">    start_distance: 2520 m</span>
+<span class="go">        start_time: 2016-03-21 07:37:30.532309+00:00</span>
+<span class="go">       origin_time: 2016-03-21 07:37:10.535000+00:00</span>
+<span class="go">         data_type: strain rate</span>
+</pre></div>
+</div>
+<p>此外，数据尺寸 <code class="docutils literal notranslate"><span class="pre">shape</span></code> ，信道数量 <code class="docutils literal notranslate"><span class="pre">nch</span></code> 采样点数 <code class="docutils literal notranslate"><span class="pre">nt</span></code> ，结束道号 <code class="docutils literal notranslate"><span class="pre">end_channel</span></code> ，结束距离 <code class="docutils literal notranslate"><span class="pre">end_distance</span></code> 和结束时间 <code class="docutils literal notranslate"><span class="pre">end_time</span></code> 将自动计算，可作为属性被调用。</p>
+</section>
+<section id="dasdatetime">
+<h2>DASDateTime类<a class="headerlink" href="#dasdatetime" title="Permalink to this heading"></a></h2>
+<p>DASPy创建了 <code class="docutils literal notranslate"><span class="pre">DASDateTime</span></code> 类，以表示数据的时间信息，包括起始时间 <code class="docutils literal notranslate"><span class="pre">start_time</span></code> 、结束时间 <code class="docutils literal notranslate"><span class="pre">end_time</span></code> 和事件起始时间 <code class="docutils literal notranslate"><span class="pre">origin_time</span></code> 。</p>
+<p><code class="docutils literal notranslate"><span class="pre">DASDateTime</span></code> 是 <code class="docutils literal notranslate"><span class="pre">datetime.DateTime</span></code> 类的子类，继承了 <code class="docutils literal notranslate"><span class="pre">datetime.DateTime</span></code> 的所有方法。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy.core</span> <span class="kn">import</span> <span class="n">DASDateTime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s1">&#39;2021-03-19T1:52:23&#39;</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S&#39;</span><span class="p">)</span>
+<span class="go">DASDateTime(2021, 03, 19, 1, 52, 23)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">DASDateTime</span></code> 未指定时区时默认使用当地时区，DASPy内置有当地时区 <code class="docutils literal notranslate"><span class="pre">local_tz</span></code> 和utc时区 <code class="docutils literal notranslate"><span class="pre">utc</span></code> 用于指定时区：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy.core.dasdatetime</span> <span class="kn">import</span> <span class="n">utc</span><span class="p">,</span> <span class="n">local_tz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="mi">1616089943</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">utc</span><span class="p">)</span>
+<span class="go">DASDateTime(2021, 3, 18, 17, 52, 23, tzinfo=datetime.timezone.utc)</span>
+</pre></div>
+</div>
+<p>如需使用其他时区可以用 <code class="docutils literal notranslate"><span class="pre">datetime.timezone(datetime.timedelta(hours=h))</span></code> 等方法建立。</p>
+<p>除了父类本身支持的 <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code> 和 <code class="docutils literal notranslate"><span class="pre">datetime.timedelta</span></code> 之间的加减运算以外， <code class="docutils literal notranslate"><span class="pre">DASDateTime</span></code> 还支持输入数字和可迭代的 <code class="docutils literal notranslate"><span class="pre">Iterable</span></code> 来计算加和减，所有时间差都以秒（s）为单位表示，并且会自动处理时区问题：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">100</span>
+<span class="go">DASDateTime(2021, 3, 24, 14, 29, 40)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+<span class="go">[DASDateTime(2021, 3, 24, 14, 28, 10), DASDateTime(2021, 3, 24, 14, 28, 20), DASDateTime(2021, 3, 24, 14, 28, 30)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mi">100</span>
+<span class="go">DASDateTime(2021, 3, 24, 14, 26, 20)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
+<span class="go">477337.0</span>
+</pre></div>
+</div>
+<p>可以将 <code class="docutils literal notranslate"><span class="pre">DASDateTime</span></code> 实例转换为父类 <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code> 实例：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span><span class="o">.</span><span class="n">convert_to_datetime</span><span class="p">()</span>
+<span class="go">datetime.datetime(2021, 3, 19, 1, 52, 23)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="%E5%AE%89%E8%A3%85.html" class="btn btn-neutral float-left" title="安装" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E4%BC%A0%E7%BB%9F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html" class="btn btn-neutral float-right" title="传统数据处理" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2024, Minzhe Hu.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
