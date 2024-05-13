@@ -51,7 +51,12 @@
 <li class="toctree-l1"><a class="reference internal" href="%E4%BC%A0%E7%BB%9F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">传统数据处理</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html">可视化</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BF%A1%E9%81%93%E5%88%86%E6%9E%90.html">信道分析</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">数据去噪</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">数据去噪</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">去尖峰噪声</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">去共模噪声</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">去随机噪声</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%B3%A2%E5%9C%BA%E5%88%86%E8%A7%A3.html">波场分解</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%BA%94%E5%8F%98-%E9%80%9F%E5%BA%A6%E8%BD%AC%E6%8D%A2.html">应变-速度转换</a></li>
 </ul>
@@ -82,7 +87,106 @@
              
   <section id="id1">
 <h1>数据去噪<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
-<p>待更新，催更可联系 <a class="reference external" href="mailto:hmz2018&#37;&#52;&#48;mail&#46;ustc&#46;edu&#46;cn">hmz2018<span>&#64;</span>mail<span>&#46;</span>ustc<span>&#46;</span>edu<span>&#46;</span>cn</a></p>
+<p>DAS主要包括尖峰噪声、共模噪声、随机噪声和相干噪声。DASPy的数据去噪模块提供了 <a class="reference internal" href="#id2"><span class="std std-ref">去尖峰噪声</span></a> 、 <a class="reference internal" href="#id4"><span class="std std-ref">去共模噪声</span></a> 和 <a class="reference internal" href="#id6"><span class="std std-ref">去随机噪声</span></a> 三个功能，相干噪声可使用 <a class="reference internal" href="%E6%B3%A2%E5%9C%BA%E5%88%86%E8%A7%A3.html"><span class="doc">波场分解</span></a> 中提供的方法去除。</p>
+<section id="id2">
+<span id="id3"></span><h2>去尖峰噪声<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>尖峰噪声表现为波形中异常大的振幅，通常是由激光频率漂移或激光噪声导致的。DASPy使用中值滤波的方法去除尖峰噪声：</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>示例数据为Stanford DAS-1记录的地震信号，可从 <a class="reference external" href="https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Stanford1_20180104_113058.566+0000.sgy">https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Stanford1_20180104_113058.566+0000.sgy</a> 下载，并通过以下方式读取并预处理：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span><span class="p">,</span> <span class="n">DASDateTime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;Stanford1_20180104_113058.566+0000.sgy&#39;</span><span class="p">,</span> <span class="n">ch2</span><span class="o">=</span><span class="mi">320</span><span class="p">)</span>
+<span class="go">UserWarning: This data format segy doesn&#39;t include channel interval.</span>
+<span class="go">Please set Section.dx manually.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">566000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">origin_time</span> <span class="o">=</span> <span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">44</span><span class="p">)</span> <span class="c1"># 发震时刻</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">bandpass</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">trimming</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">origin_time</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">origin_time</span><span class="o">+</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xmode</span><span class="o">=</span><span class="s1">&#39;channel&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/spike_removal0.png"><img alt="_images/spike_removal0.png" src="_images/spike_removal0.png" style="width: 600px;" /></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">spike_removal</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xmode</span><span class="o">=</span><span class="s1">&#39;channel&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/spike_removal1.png"><img alt="_images/spike_removal1.png" src="_images/spike_removal1.png" style="width: 600px;" /></a>
+</section>
+<section id="id4">
+<span id="id5"></span><h2>去共模噪声<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<p>共模噪声是由光电系统的振动产生的，并同时出现在所有信道上的同相噪声。DASPy采用波形的空间中值或平均值来获得共模噪声，计算信道记录和共模噪声的互相关系数，并从信道记录中去除共模噪声和互相关系数的乘积。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>示例数据为RAPID数据集的远海信道记录，可从 <a class="reference external" href="http://piweb.ooirsn.uw.edu/das/data/Optasense/NorthCable/TransmitFiber/North-C1-LR-P1kHz-GL50m-Sp2m-FS200Hz_2021-11-03T15_06_51-0700/North-C1-LR-P1kHz-GL50m-Sp2m-FS200Hz_2021-11-04T015902Z.h5">http://piweb.ooirsn.uw.edu/das/data/Optasense/NorthCable/TransmitFiber/North-C1-LR-P1kHz-GL50m-Sp2m-FS200Hz_2021-11-03T15_06_51-0700/North-C1-LR-P1kHz-GL50m-Sp2m-FS200Hz_2021-11-04T015902Z.h5</a> 下载，并通过以下方式读取并预处理：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;North-C1-LR-P1kHz-GL50m-Sp2m-FS200Hz_2021-11-04T015902Z.h5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">trimming</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mi">18000</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">30000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">data</span> <span class="o">*=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">16</span> <span class="c1"># 数据的缩放系数，见sec.headers[&#39;Acquisition&#39;][&#39;Raw[0]&#39;][&#39;attrs&#39;][&#39;RawDataUnit&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">phase2strain</span><span class="p">(</span><span class="mf">1550.12</span> <span class="o">*</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="mf">0.78</span><span class="p">,</span> <span class="n">sec</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Acquisition&#39;</span><span class="p">][</span><span class="s1">&#39;Custom&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;Fibre Refractive Index&#39;</span><span class="p">])</span> <span class="c1"># 将光相移转换为应变</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">bandpass</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">taper</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">trimming</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">sec</span><span class="o">.</span><span class="n">start_time</span><span class="o">+</span><span class="mi">20</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">sec</span><span class="o">.</span><span class="n">start_time</span><span class="o">+</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/common_mode_noise_removal0.png"><img alt="_images/common_mode_noise_removal0.png" src="_images/common_mode_noise_removal0.png" style="width: 600px;" /></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">common_mode_noise_removal</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/common_mode_noise_removal1.png"><img alt="_images/common_mode_noise_removal1.png" src="_images/common_mode_noise_removal1.png" style="width: 600px;" /></a>
+</section>
+<section id="id6">
+<span id="id7"></span><h2>去随机噪声<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<p>DAS数据中的随机噪声主要是由采样误差和相位噪声等仪器缺陷引起的，DASPy使用曲线变换消除随机噪声：</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>同 <a class="reference internal" href="#id2"><span class="std std-ref">去尖峰噪声</span></a> 使用的示例数据一致，此处使用去除尖峰噪声后的波形，并通过以下方式读取并预处理：
+&gt;&gt;&gt; from daspy import read, DASDateTime
+&gt;&gt;&gt; sec = read(‘Stanford1_20180104_113058.566+0000.sgy’, ch2=320)
+UserWarning: This data format segy doesn’t include channel interval.
+Please set Section.dx manually.
+&gt;&gt;&gt; sec.dx = 8
+&gt;&gt;&gt; sec.start_time = DASDateTime(2018, 1, 4, 11, 30, 58, 566000)
+&gt;&gt;&gt; sec.bandpass(1, 20)
+&gt;&gt;&gt; origin_time = DASDateTime(2018, 1, 4, 11, 34, 44) # 发震时刻
+&gt;&gt;&gt; sec.trimming(tmin=origin_time-10, tmax=origin_time+12)
+&gt;&gt;&gt; sec.spike_removal() # 数据中如有尖峰噪声，需要先去除</p>
+</div>
+<p>使用一段噪声记录作为噪声的基准，在曲波域以软阈值（默认）去除噪声：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">trimming</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">origin_time</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">origin_time</span><span class="o">+</span><span class="mi">12</span><span class="p">)</span> <span class="c1"># 地震记录</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_ns</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">trimming</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">origin_time</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">origin_time</span><span class="p">)</span> <span class="c1"># 噪声记录</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq_soft</span> <span class="o">=</span> <span class="n">sec_eq</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">curvelet_denoising</span><span class="p">(</span><span class="n">noise</span><span class="o">=</span><span class="n">sec_ns</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>同样使用参考噪声记录，在曲波域以硬阈值去除噪声，可以使波形的绝对振幅不变小失真：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq_hard</span> <span class="o">=</span> <span class="n">sec_eq</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">curvelet_denoising</span><span class="p">(</span><span class="n">noise</span><span class="o">=</span><span class="n">sec_ns</span><span class="p">,</span> <span class="n">soft_thresh</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>没有可用的参考噪声记录时，函数会统计曲波系数的拐点以确定噪声的阈值，建议设置 <code class="docutils literal notranslate"><span class="pre">pad=0</span></code> 并调节 <code class="docutils literal notranslate"><span class="pre">knee_fac</span></code> 参数以减少人工伪影（不推荐此方法）：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq_knee</span> <span class="o">=</span> <span class="n">sec_eq</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">curvelet_denoising</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">knee_fac</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>绘制原波形以及以上三种去噪的效果：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">xmode</span><span class="o">=</span><span class="s1">&#39;channel&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq_soft</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">xmode</span><span class="o">=</span><span class="s1">&#39;channel&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;soft thresh&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq_hard</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">xmode</span><span class="o">=</span><span class="s1">&#39;channel&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;hard thresh&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq_knee</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">xmode</span><span class="o">=</span><span class="s1">&#39;channel&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;without reference noise&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/curvelet_denoising.png"><img alt="_images/curvelet_denoising.png" src="_images/curvelet_denoising.png" style="width: 700px;" /></a>
+</section>
 </section>
 
 
