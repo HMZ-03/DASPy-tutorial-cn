@@ -52,7 +52,12 @@
 <li class="toctree-l1"><a class="reference internal" href="%E4%BF%A1%E9%81%93%E5%88%86%E6%9E%90.html">信道分析</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E5%8E%BB%E5%99%AA.html">数据去噪</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%B3%A2%E5%9C%BA%E5%88%86%E8%A7%A3.html">波场分解</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">应变-速度转换</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">应变-速度转换</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fk">FK重缩放法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">曲波变换法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">时域慢度检测法</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -81,7 +86,23 @@
              
   <section id="id1">
 <h1>应变-速度转换<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
-<p>待更新，催更可联系 <a class="reference external" href="mailto:hmz2018&#37;&#52;&#48;mail&#46;ustc&#46;edu&#46;cn">hmz2018<span>&#64;</span>mail<span>&#46;</span>ustc<span>&#46;</span>edu<span>&#46;</span>cn</a></p>
+<p>DAS测量应变或应变率，而传统地震学研究中通常使用位移、速度或加速度。应变可以通过乘以视相速度来转换为粒子速度。基于这个原理，DASPy集成了三种将应变/应变率转换为速度/加速度（以下统称应变-速度转换）的方法： <a class="reference internal" href="#fk"><span class="std std-ref">FK重缩放法</span></a> 、 <a class="reference internal" href="#id3"><span class="std std-ref">曲波变换法</span></a> 和 <a class="reference internal" href="#id5"><span class="std std-ref">时域慢度检测法</span></a> 。</p>
+<section id="fk">
+<span id="id2"></span><h2>FK重缩放法<a class="headerlink" href="#fk" title="Permalink to this heading"></a></h2>
+<p>FK重缩放法通过将FK域中的每个点乘以其相应的视速度（FK域中的斜率）实现应变-速度转换。</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>示例数据为Brady地热试验田某一节点地震仪和一段DAS记录的秒M4.3地震信号</p>
+</div>
+</section>
+<section id="id3">
+<span id="id4"></span><h2>曲波变换法<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<p>曲波变换的基函数在FK域中表现为具有一定速度范围的楔形，曲波变换法将每个曲波系数乘以其基函数的中值速度，以实现应变-速度转换。。</p>
+</section>
+<section id="id5">
+<span id="id6"></span><h2>时域慢度检测法<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
+<p>时域慢度确定方法通过搜索最大相似度来获得每个时间步的视速度</p>
+</section>
 </section>
 
 

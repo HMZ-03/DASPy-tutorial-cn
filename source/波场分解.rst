@@ -56,7 +56,7 @@ FK滤波有时会导致伪影，包括波形边缘不连续性引起的边缘伪
 
     >>> sec_eq, sec_tf = sec.curvelet_windowing(mode='decompose', vmin=1000)
 
-绘出原波形、分离出的直达波以及散射波的波形和FK谱：
+绘出原波形、分离出的直达波以及散射波的波形：
 
     >>> import matplotlib.pyplot as plt
     >>> fig, ax = plt.subplots(1, 3, figsize=(8,3), sharex='row', sharey='row', dpi=200)
