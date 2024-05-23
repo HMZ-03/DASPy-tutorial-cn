@@ -1,0 +1,74 @@
+开始
+=============================================
+
+
+读取数据
+------------------------------
+
+``read函数`` 用于读取多类型的DAS数据文件，它支持读取.h5、.tdms、.segy/.sgy文件，还支持读取存储为 .pkl文件的 ``Section`` 类实例（见下）。
+
+在默认情况下，函数将输出包含数据和元数据的 ``Section`` 类实例。可设置 ``output_type='array'`` 以输出数据为 ``numpy.array`` 格式，此时将以 ``dict`` 格式输出元数据。设置 ``ch1`` 或/和 ``ch2`` 可限制读取的信道范围。
+
+读取示例波形为 ``Section`` 实例（推荐）或 ``numpy.array`` 和 ``dict`` ：
+
+    >>> from daspy import read
+    >>> sec = read()
+    >>> data, metadata = read(output_type='array', ch1=2700, ch2=2800) # 设置信道范围
+
+
+Section类
+------------------------------
+
+DASPy的功能可以通过调用函数（面向过程）实现，也可以通过类的方法（面向对象）实现。我们推荐面向对象的方式，对DAS数据体的类 ``Section`` 类进行操作。DASPy中的所有面向用户的函数和类的方法都同名，且为名词（如 ``normalization`` 和 ``Section.normalization`` ）.
+
+``Section`` 类的属性保存了该DAS数据以及头段信，其中波形数据 ``data`` ，道间距 ``dx`` 、采样率 ``fs`` 是必须设置的（但可以暂时设置为 ``None`` ）；起始道号 ``start_channel`` 、起始距离 ``start_distance`` 、起始时间 ``start_time`` 在未设置时默认为0；事件起始时间 ``origin_time`` 、标距长度 ``gauge_length`` 、数据类型 ``data_type`` 、数据尺度 ``scale`` 、阵列几何 ``geometry`` 、拐点道号 ``turning_channels`` 、其他头段信息 ``headers`` 可不设置。
+
+当 ``Section`` 实例转换为 ``str`` 类型时会自动格式化输出，如调用 ``print`` 时：
+
+    >>> print(sec)
+                  data: shape(500, 5000)
+                    dx: 1 m
+                    fs: 100.0 Hz
+         start_channel: 2500
+        start_distance: 2520 m
+            start_time: 2016-03-21 07:37:30.532309+00:00
+           origin_time: 2016-03-21 07:37:10.535000+00:00
+             data_type: strain rate
+
+此外，数据尺寸 ``shape`` ，信道数量 ``nch`` 采样点数 ``nt`` ，结束道号 ``end_channel`` ，结束距离 ``end_distance`` 和结束时间 ``end_time`` 将自动计算，可作为属性被调用。
+
+
+DASDateTime类
+------------------------------
+
+DASPy创建了 ``DASDateTime`` 类，以表示数据的时间信息，包括起始时间 ``start_time`` 、结束时间 ``end_time`` 和事件起始时间 ``origin_time`` 。
+
+``DASDateTime`` 是 ``datetime.DateTime`` 类的子类，继承了 ``datetime.DateTime`` 的所有方法。
+
+    >>> from daspy.core import DASDateTime
+    >>> DASDateTime.strptime('2021-03-19T1:52:23', '%Y-%m-%dT%H:%M:%S')
+    DASDateTime(2021, 03, 19, 1, 52, 23)
+
+``DASDateTime`` 未指定时区时默认使用utc时区，DASPy内置有当地时区 ``local_tz`` 和utc时区 ``utc`` 用于指定时区：
+
+    >>> from daspy.core.dasdatetime import utc, local_tz
+    >>> DASDateTime.fromtimestamp(1616089943, tz=utc)
+    DASDateTime(2021, 3, 18, 17, 52, 23, tzinfo=datetime.timezone.utc)
+
+如需使用其他时区可以用 ``datetime.timezone(datetime.timedelta(hours=h))`` 等方法建立。
+
+除了父类本身支持的 ``datetime.datetime`` 和 ``datetime.timedelta`` 之间的加减运算以外， ``DASDateTime`` 还支持输入数字和可迭代对象 ``Iterable`` 来计算加和减，所有时间差都以秒（s）为单位表示，并且会自动处理时区未指定的问题：
+
+    >>> DASDateTime(2021, 3, 24, 14, 28, 0, 0) + 100
+    DASDateTime(2021, 3, 24, 14, 29, 40)
+    >>> DASDateTime(2021, 3, 24, 14, 28, 0, 0) + [10, 20, 30]
+    [DASDateTime(2021, 3, 24, 14, 28, 10), DASDateTime(2021, 3, 24, 14, 28, 20), DASDateTime(2021, 3, 24, 14, 28, 30)]
+    >>> DASDateTime(2021, 3, 24, 14, 28, 0, 0) - 100
+    DASDateTime(2021, 3, 24, 14, 26, 20)
+    >>> DASDateTime(2021, 3, 24, 14, 28, 0, 0) - DASDateTime(2021, 3, 19, 1, 52, 23)
+    477337.0
+
+有需要时可以将 ``DASDateTime`` 实例转换为父类 ``datetime.datetime`` 实例：
+
+    >>> DASDateTime(2021, 3, 19, 1, 52, 23).convert_to_datetime()
+    datetime.datetime(2021, 3, 19, 1, 52, 23)
