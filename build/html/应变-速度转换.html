@@ -46,8 +46,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="%E5%AE%89%E8%A3%85.html">安装</a></li>
-<li class="toctree-l1"><a class="reference internal" href="%E5%BC%80%E5%A7%8B.html">开始</a></li>
-<li class="toctree-l1"><a class="reference internal" href="%E4%BC%A0%E7%BB%9F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">传统数据处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE.html">读取数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">基本数据处理</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html">可视化</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BF%A1%E9%81%93%E5%88%86%E6%9E%90.html">信道分析</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E5%8E%BB%E5%99%AA.html">数据去噪</a></li>
@@ -90,7 +90,7 @@
 <p>DAS测量应变或应变率，而传统地震学研究中通常使用位移、速度或加速度。应变可以通过乘以视相速度来转换为粒子速度。基于这个原理，DASPy集成了三种将应变/应变率转换为速度/加速度（以下统称应变-速度转换）的方法： <a class="reference internal" href="#fk"><span class="std std-ref">FK重缩放法</span></a> 、 <a class="reference internal" href="#id3"><span class="std std-ref">曲波变换法</span></a> 和 <a class="reference internal" href="#id5"><span class="std std-ref">时域慢度检测法</span></a> 。</p>
 <div class="admonition note">
 <p class="admonition-title">备注</p>
-<p>该节示例数据为Brady地热试验田一段DAS记录的M4.3地震信号，可从 <a class="reference external" href="https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Brady_DAS_M4.3_2688_2826.pkl">https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Brady_DAS_M4.3_2688_2826.pkl</a> 下载，用于对比的165号节点地震仪在同时间的记录，可从 <a class="reference external" href="https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Brady_node_M4.3_165.sac">https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Brady_node_M4.3_165.sac</a> 下载，DAS第2781道和该节点地震仪距离为2.6米。DAS数据已经做的预处理有：截取某一线性段（第2688至2826道）、去除授时误差（1.048秒）、将应变率积分为应变、从1000Hz降采样至500Hz、带通滤波至1~5Hz、截取至地震发生后19.99秒至70.01秒（允许在和节点地震仪数据做互相关时有±0.01秒的时差）；节点地震仪已经做的预处理有：旋转至DAS轴向分量、滤波至1~5Hz、截取地震发生后20秒至70秒。通过以下方式读取（需要安装 <a class="reference external" href="https://docs.obspy.org/">ObsPy</a> ）：</p>
+<p>该节示例数据为Brady地热试验田一段DAS记录的M4.3地震信号，可从 <a class="reference external" href="https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Brady_DAS_M4.3_2688_2826.pkl">https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Brady_DAS_M4.3_2688_2826.pkl</a> 下载；用于对比的165号节点地震仪在同时间的记录，可从 <a class="reference external" href="https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Brady_node_M4.3_165.sac">https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Brady_node_M4.3_165.sac</a> 下载，DAS第2781道和该节点地震仪距离为2.6米。DAS数据已经做的预处理有：截取某一线性段（第2688至2826道）、去除授时误差（1.048秒）、将应变率积分为应变、从1000Hz降采样至500Hz、带通滤波至1~5Hz、截取至地震发生后19.99秒至70.01秒（允许在和节点地震仪数据做互相关时有±0.01秒的时差）；节点地震仪已经做的预处理有：旋转至DAS轴向分量、滤波至1~5Hz、截取地震发生后20秒至70秒。通过以下方式读取（需要安装 <a class="reference external" href="https://docs.obspy.org/">ObsPy</a> ）：</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">obspy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="n">obspy</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;Brady_node_M4.3_165.sac&#39;</span><span class="p">)</span>
@@ -107,7 +107,7 @@
 </section>
 <section id="id3">
 <span id="id4"></span><h2>曲波变换法<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
-<p>曲波变换的基函数在FK域中表现为具有一定速度范围的楔形，曲波变换法将每个曲波系数乘以其基函数的中值速度，以实现应变-速度转换。。</p>
+<p>曲波变换的基函数在FK域中表现为具有一定速度范围的楔形，曲波变换法将每个曲波系数乘以其基函数的中值速度，以实现应变-速度转换。</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_cv</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">fk_rescaling</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 </pre></div>
 </div>

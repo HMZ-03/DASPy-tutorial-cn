@@ -1,7 +1,7 @@
 信道分析
 =============================================
 
-DASPy的信道属性分析部分： :ref:`信道插值` 模块进行信道插值定位， :ref:`拐点检测` 查找光纤拐点， :ref:`坏道检测` 检查信道质量。
+DASPy的信道属性分析部分： :ref:`信道插值` 进行信道插值定位， :ref:`拐点检测` 查找光纤拐点， :ref:`坏道检测` 检查信道质量。
 
 
 .. _信道插值:
@@ -12,7 +12,7 @@ DASPy的信道属性分析部分： :ref:`信道插值` 模块进行信道插值
 DASPy的信道插值支持联合使用两种类型的数据：包含道号的已知点（即经度&纬度&道号）和不含道号的轨迹点（即经度&纬度），其中已知点是必要输入，轨迹点是用以约束光缆几何形态的可选输入。利用 `通用横轴墨卡托投影 <https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system>`_ （Universal Transverse Mercator，简称UTM），在平面坐标系进行插值后反投影回 `WGS84坐标系 <https://en.wikipedia.org/wiki/World_Geodetic_System>`_ 。
 
 .. note::
-    示例数据为RAPID数据北光缆的光缆轨迹，可通过以下方式从在线读取：
+    示例数据为RAPID数据集北光缆的坐标，可通过以下方式从在线读取：
 
     >>> import numpy as np
     >>> txt_url = 'http://piweb.ooirsn.uw.edu/das/processed/metadata/Geometry/OOI_RCA_DAS_channel_location/north_cable_latlon.txt'

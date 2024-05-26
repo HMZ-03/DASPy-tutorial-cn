@@ -1,14 +1,15 @@
 数据去噪
 =============================================
 
-DAS主要包括尖峰噪声、共模噪声、随机噪声和相干噪声。DASPy的数据去噪模块提供了 :ref:`去尖峰噪声` 、 :ref:`去共模噪声` 和 :ref:`去随机噪声` 三个功能，相干噪声可使用 :doc:`波场分解` 中提供的方法去除。 
+DAS信号中的噪声主要有尖峰噪声、共模噪声、随机噪声和相干噪声。DASPy的数据去噪模块提供了 :ref:`去尖峰噪声` 、 :ref:`去共模噪声` 和 :ref:`去随机噪声` 三个功能，相干噪声可使用 :doc:`波场分解` 中提供的方法去除。 
+
 
 .. _去尖峰噪声:
 
 去尖峰噪声
 ------------------------------
 
-尖峰噪声表现为波形中异常大的振幅，通常是由激光频率漂移或激光噪声导致的。DASPy使用中值滤波的方法去除尖峰噪声：
+尖峰噪声表现为波形中异常大的振幅，通常是由激光频率漂移或激光噪声引起的。DASPy分别应用跨通道和跨时间中值滤波器，生成中值振幅谱图，并把振幅超过中值谱一定倍数的点识别为尖峰，然后用相邻通道的插值替换所有尖峰。
 
 .. note::
     示例数据为Stanford DAS-1记录的地震信号，可从 `<https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Stanford1_20180104_113058.566+0000.sgy>`_ 下载，并通过以下方式读取并预处理：
@@ -38,6 +39,7 @@ DAS主要包括尖峰噪声、共模噪声、随机噪声和相干噪声。DASPy
 .. image:: ../media/spike_removal1.png
     :width: 600
 
+
 .. _去共模噪声:
 
 去共模噪声
@@ -52,7 +54,7 @@ DAS主要包括尖峰噪声、共模噪声、随机噪声和相干噪声。DASPy
     >>> from daspy import read
     >>> sec = read('North-C1-LR-P1kHz-GL50m-Sp2m-FS200Hz_2021-11-04T015902Z.h5')
     >>> sec.trimming(mode=0, xmin=18000, xmax=30000)
-    >>> sec.data *= 2 * np.pi / 2 ** 16 # 数据的缩放系数，见sec.headers['Acquisition']['Raw[0]']['attrs']['RawDataUnit']
+    >>> sec.scale = 2 * np.pi / 2 ** 16 # 数据的缩放系数，见sec.headers['Acquisition']['Raw[0]']['attrs']['RawDataUnit']
     >>> sec.phase2strain(1550.12 * 1e-9, 0.78, sec.headers['Acquisition']['Custom']['attrs']['Fibre Refractive Index']) # 将光相移转换为应变
     >>> sec.bandpass(15, 27, detrend=True, taper=0.1)
     >>> sec.trimming(tmin=sec.start_time+20, tmax=sec.start_time+30)
@@ -71,6 +73,7 @@ DAS主要包括尖峰噪声、共模噪声、随机噪声和相干噪声。DASPy
 
 .. image:: ../media/common_mode_noise_removal1.png
     :width: 600
+
 
 .. _去随机噪声:
 
@@ -102,7 +105,7 @@ DAS数据中的随机噪声主要是由采样误差和相位噪声等仪器缺�
 
     >>> sec_eq_hard = sec_eq.copy().curvelet_denoising(noise=sec_ns, soft_thresh=False)
 
-没有可用的参考噪声记录时，函数会统计曲波系数的拐点以确定噪声的阈值，建议设置 ``pad=0`` 并调节 ``knee_fac`` 参数以减少人工伪影（不推荐此方法）：
+没有可用的参考噪声记录时，函数会计算曲波系数的拐点以确定噪声的阈值，建议设置 ``pad=0`` 并调节 ``knee_fac`` 参数以减少人工伪影（不推荐此方法）：
 
     >>> sec_eq_knee = sec_eq.copy().curvelet_denoising(pad=0, knee_fac=0.1)
 

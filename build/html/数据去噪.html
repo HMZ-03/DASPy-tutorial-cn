@@ -47,8 +47,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="%E5%AE%89%E8%A3%85.html">安装</a></li>
-<li class="toctree-l1"><a class="reference internal" href="%E5%BC%80%E5%A7%8B.html">开始</a></li>
-<li class="toctree-l1"><a class="reference internal" href="%E4%BC%A0%E7%BB%9F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">传统数据处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE.html">读取数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">基本数据处理</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html">可视化</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BF%A1%E9%81%93%E5%88%86%E6%9E%90.html">信道分析</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">数据去噪</a><ul>
@@ -87,10 +87,10 @@
              
   <section id="id1">
 <h1>数据去噪<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
-<p>DAS主要包括尖峰噪声、共模噪声、随机噪声和相干噪声。DASPy的数据去噪模块提供了 <a class="reference internal" href="#id2"><span class="std std-ref">去尖峰噪声</span></a> 、 <a class="reference internal" href="#id4"><span class="std std-ref">去共模噪声</span></a> 和 <a class="reference internal" href="#id6"><span class="std std-ref">去随机噪声</span></a> 三个功能，相干噪声可使用 <a class="reference internal" href="%E6%B3%A2%E5%9C%BA%E5%88%86%E8%A7%A3.html"><span class="doc">波场分解</span></a> 中提供的方法去除。</p>
+<p>DAS信号中的噪声主要有尖峰噪声、共模噪声、随机噪声和相干噪声。DASPy的数据去噪模块提供了 <a class="reference internal" href="#id2"><span class="std std-ref">去尖峰噪声</span></a> 、 <a class="reference internal" href="#id4"><span class="std std-ref">去共模噪声</span></a> 和 <a class="reference internal" href="#id6"><span class="std std-ref">去随机噪声</span></a> 三个功能，相干噪声可使用 <a class="reference internal" href="%E6%B3%A2%E5%9C%BA%E5%88%86%E8%A7%A3.html"><span class="doc">波场分解</span></a> 中提供的方法去除。</p>
 <section id="id2">
 <span id="id3"></span><h2>去尖峰噪声<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
-<p>尖峰噪声表现为波形中异常大的振幅，通常是由激光频率漂移或激光噪声导致的。DASPy使用中值滤波的方法去除尖峰噪声：</p>
+<p>尖峰噪声表现为波形中异常大的振幅，通常是由激光频率漂移或激光噪声引起的。DASPy分别应用跨通道和跨时间中值滤波器，生成中值振幅谱图，并把振幅超过中值谱一定倍数的点识别为尖峰，然后用相邻通道的插值替换所有尖峰。</p>
 <div class="admonition note">
 <p class="admonition-title">备注</p>
 <p>示例数据为Stanford DAS-1记录的地震信号，可从 <a class="reference external" href="https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Stanford1_20180104_113058.566+0000.sgy">https://raw.githubusercontent.com/HMZ-03/DASPy-data/main/Stanford1_20180104_113058.566+0000.sgy</a> 下载，并通过以下方式读取并预处理：</p>
@@ -126,7 +126,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="s1">&#39;North-C1-LR-P1kHz-GL50m-Sp2m-FS200Hz_2021-11-04T015902Z.h5&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">trimming</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mi">18000</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mi">30000</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">data</span> <span class="o">*=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">16</span> <span class="c1"># 数据的缩放系数，见sec.headers[&#39;Acquisition&#39;][&#39;Raw[0]&#39;][&#39;attrs&#39;][&#39;RawDataUnit&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">16</span> <span class="c1"># 数据的缩放系数，见sec.headers[&#39;Acquisition&#39;][&#39;Raw[0]&#39;][&#39;attrs&#39;][&#39;RawDataUnit&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">phase2strain</span><span class="p">(</span><span class="mf">1550.12</span> <span class="o">*</span> <span class="mf">1e-9</span><span class="p">,</span> <span class="mf">0.78</span><span class="p">,</span> <span class="n">sec</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Acquisition&#39;</span><span class="p">][</span><span class="s1">&#39;Custom&#39;</span><span class="p">][</span><span class="s1">&#39;attrs&#39;</span><span class="p">][</span><span class="s1">&#39;Fibre Refractive Index&#39;</span><span class="p">])</span> <span class="c1"># 将光相移转换为应变</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">bandpass</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">27</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">taper</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">trimming</span><span class="p">(</span><span class="n">tmin</span><span class="o">=</span><span class="n">sec</span><span class="o">.</span><span class="n">start_time</span><span class="o">+</span><span class="mi">20</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="n">sec</span><span class="o">.</span><span class="n">start_time</span><span class="o">+</span><span class="mi">30</span><span class="p">)</span>
@@ -170,7 +170,7 @@ Please set Section.dx manually.
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq_hard</span> <span class="o">=</span> <span class="n">sec_eq</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">curvelet_denoising</span><span class="p">(</span><span class="n">noise</span><span class="o">=</span><span class="n">sec_ns</span><span class="p">,</span> <span class="n">soft_thresh</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>没有可用的参考噪声记录时，函数会统计曲波系数的拐点以确定噪声的阈值，建议设置 <code class="docutils literal notranslate"><span class="pre">pad=0</span></code> 并调节 <code class="docutils literal notranslate"><span class="pre">knee_fac</span></code> 参数以减少人工伪影（不推荐此方法）：</p>
+<p>没有可用的参考噪声记录时，函数会计算曲波系数的拐点以确定噪声的阈值，建议设置 <code class="docutils literal notranslate"><span class="pre">pad=0</span></code> 并调节 <code class="docutils literal notranslate"><span class="pre">knee_fac</span></code> 参数以减少人工伪影（不推荐此方法）：</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_eq_knee</span> <span class="o">=</span> <span class="n">sec_eq</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">curvelet_denoising</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">knee_fac</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>

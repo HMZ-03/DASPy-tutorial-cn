@@ -47,8 +47,8 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="%E5%AE%89%E8%A3%85.html">安装</a></li>
-<li class="toctree-l1"><a class="reference internal" href="%E5%BC%80%E5%A7%8B.html">开始</a></li>
-<li class="toctree-l1"><a class="reference internal" href="%E4%BC%A0%E7%BB%9F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">传统数据处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE.html">读取数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">基本数据处理</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html">可视化</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">信道分析</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">信道插值</a></li>
@@ -87,13 +87,13 @@
              
   <section id="id1">
 <h1>信道分析<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
-<p>DASPy的信道属性分析部分： <a class="reference internal" href="#id2"><span class="std std-ref">信道插值</span></a> 模块进行信道插值定位， <a class="reference internal" href="#id5"><span class="std std-ref">拐点检测</span></a> 查找光纤拐点， <a class="reference internal" href="#id7"><span class="std std-ref">坏道检测</span></a> 检查信道质量。</p>
+<p>DASPy的信道属性分析部分： <a class="reference internal" href="#id2"><span class="std std-ref">信道插值</span></a> 进行信道插值定位， <a class="reference internal" href="#id5"><span class="std std-ref">拐点检测</span></a> 查找光纤拐点， <a class="reference internal" href="#id7"><span class="std std-ref">坏道检测</span></a> 检查信道质量。</p>
 <section id="id2">
 <span id="id3"></span><h2>信道插值<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
 <p>DASPy的信道插值支持联合使用两种类型的数据：包含道号的已知点（即经度&amp;纬度&amp;道号）和不含道号的轨迹点（即经度&amp;纬度），其中已知点是必要输入，轨迹点是用以约束光缆几何形态的可选输入。利用 <a class="reference external" href="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system">通用横轴墨卡托投影</a> （Universal Transverse Mercator，简称UTM），在平面坐标系进行插值后反投影回 <a class="reference external" href="https://en.wikipedia.org/wiki/World_Geodetic_System">WGS84坐标系</a> 。</p>
 <div class="admonition note">
 <p class="admonition-title">备注</p>
-<p>示例数据为RAPID数据北光缆的光缆轨迹，可通过以下方式从在线读取：</p>
+<p>示例数据为RAPID数据集北光缆的坐标，可通过以下方式从在线读取：</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">txt_url</span> <span class="o">=</span> <span class="s1">&#39;http://piweb.ooirsn.uw.edu/das/processed/metadata/Geometry/OOI_RCA_DAS_channel_location/north_cable_latlon.txt&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">track_pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">txt_url</span><span class="p">)[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># 读入轨迹点，并将两列互换（使经度在纬度前）</span>

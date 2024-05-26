@@ -26,7 +26,7 @@ DASPy项目的目标是降低DAS数据处理的门槛，促进光纤地震学的
    
    安装
    读取数据
-   传统数据处理
+   基本数据处理
    可视化
    信道分析
    数据去噪
@@ -40,4 +40,4 @@ DASPy项目的目标是降低DAS数据处理的门槛，促进光纤地震学的
 .. * :ref:`modindex`
 .. * :ref:`search`
 
-如有问题请联系 `hmz2018@mail.ustc.edu.cn <hmz2018@mail.ustc.edu.cn>`_ 
+如有问题请联系 `hmz2018@mail.ustc.edu.cn <hmz2018@mail.ustc.edu.cn>`_。

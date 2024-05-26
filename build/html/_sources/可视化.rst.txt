@@ -11,7 +11,7 @@ DASPy通过 ``Section`` 类方法/函数 ``plot`` 进行图像绘制。
 
     >>> from daspy import read
     >>> sec = read()
-    >>> sec.plot() # 绘制波形
+    >>> sec.plot()
 
 .. image:: ../media/waveform.png
     :width: 600

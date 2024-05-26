@@ -1,8 +1,8 @@
-开始
+读取数据
 =============================================
 
 
-读取数据
+读取DAS数据
 ------------------------------
 
 ``read函数`` 用于读取多类型的DAS数据文件，它支持读取.h5、.tdms、.segy/.sgy文件，还支持读取存储为 .pkl文件的 ``Section`` 类实例（见下）。
@@ -19,11 +19,11 @@
 Section类
 ------------------------------
 
-DASPy的功能可以通过调用函数（面向过程）实现，也可以通过类的方法（面向对象）实现。我们推荐面向对象的方式，对DAS数据体的类 ``Section`` 类进行操作。DASPy中的所有面向用户的函数和类的方法都同名，且为名词（如 ``normalization`` 和 ``Section.normalization`` ）.
+DASPy的功能可以通过调用函数（面向过程）实现，也可以通过类的方法（面向对象）实现。我们推荐面向对象的方式，对DAS数据体的类 ``Section`` 类进行操作。DASPy中的所有面向用户的函数和类的方法都同名，且为名词（如 ``normalization`` 和 ``Section.normalization`` ）。
 
-``Section`` 类的属性保存了该DAS数据以及头段信，其中波形数据 ``data`` ，道间距 ``dx`` 、采样率 ``fs`` 是必须设置的（但可以暂时设置为 ``None`` ）；起始道号 ``start_channel`` 、起始距离 ``start_distance`` 、起始时间 ``start_time`` 在未设置时默认为0；事件起始时间 ``origin_time`` 、标距长度 ``gauge_length`` 、数据类型 ``data_type`` 、数据尺度 ``scale`` 、阵列几何 ``geometry`` 、拐点道号 ``turning_channels`` 、其他头段信息 ``headers`` 可不设置。
+``Section`` 类的属性保存了该DAS数据以及元数据，其中波形数据 ``data`` ，道间距 ``dx`` 、采样率 ``fs`` 是必须设置的（但可以暂时设置为 ``None`` ）；起始道号 ``start_channel`` 、起始距离 ``start_distance`` 、起始时间 ``start_time`` 在未设置时默认为0；事件起始时间 ``origin_time`` 、标距长度 ``gauge_length`` 、数据类型 ``data_type`` 、数据尺度 ``scale`` 、阵列几何 ``geometry`` 、拐点道号 ``turning_channels`` 、其他头段信息 ``headers`` 可不设置。
 
-当 ``Section`` 实例转换为 ``str`` 类型时会自动格式化输出，如调用 ``print`` 时：
+访问元数据：
 
     >>> print(sec)
                   data: shape(500, 5000)
@@ -43,13 +43,13 @@ DASDateTime类
 
 DASPy创建了 ``DASDateTime`` 类，以表示数据的时间信息，包括起始时间 ``start_time`` 、结束时间 ``end_time`` 和事件起始时间 ``origin_time`` 。
 
-``DASDateTime`` 是 ``datetime.DateTime`` 类的子类，继承了 ``datetime.DateTime`` 的所有方法。
+``DASDateTime`` 是 ``datetime.DateTime`` 类的子类，继承了 ``datetime.DateTime`` 的所有方法：
 
     >>> from daspy.core import DASDateTime
     >>> DASDateTime.strptime('2021-03-19T1:52:23', '%Y-%m-%dT%H:%M:%S')
     DASDateTime(2021, 03, 19, 1, 52, 23)
 
-``DASDateTime`` 未指定时区时默认使用utc时区，DASPy内置有当地时区 ``local_tz`` 和utc时区 ``utc`` 用于指定时区：
+DASPy内置有当地时区 ``local_tz`` 和utc时区 ``utc`` 用于指定时区：
 
     >>> from daspy.core.dasdatetime import utc, local_tz
     >>> DASDateTime.fromtimestamp(1616089943, tz=utc)

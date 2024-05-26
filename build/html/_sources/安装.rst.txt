@@ -1,9 +1,10 @@
 安装
 =============================================
 
-DASPy可以通过Pip、Conda等常用方式添加
+DASPy可以通过Pip、Conda等常用方式安装
 
-通过Pip安装
+
+通过Pip安装（推荐）
 --------------------
 
 ::
@@ -26,6 +27,6 @@ DASPy可以通过Pip、Conda等常用方式添加
 手动安装
 --------------------
 
-1. 从'Github<https://github.com/HMZ-03/DASPy?tab=readme-ov-file>'
-2. 安装以下依赖包: numpy, scipy >=1.13, matplotlib, geographiclib, pyproj, h5py, segyio, nptdms
-3. 添加DASPy的目录至你的Python包路径
+1. 从 `Github <https://github.com/HMZ-03/DASPy?tab=readme-ov-file>`_ 克隆或下载DASPy存储库；
+2. 安装以下依赖包: numpy, scipy >=1.13, matplotlib, geographiclib, pyproj, h5py, segyio, nptdms；
+3. 添加DASPy的目录至你的Python包路径。
