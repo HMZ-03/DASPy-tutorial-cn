@@ -108,7 +108,7 @@
 <section id="id3">
 <span id="id4"></span><h2>曲波变换法<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
 <p>曲波变换的基函数在FK域中表现为具有一定速度范围的楔形，曲波变换法将每个曲波系数乘以其基函数的中值速度，以实现应变-速度转换。</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_cv</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">fk_rescaling</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec_cv</span> <span class="o">=</span> <span class="n">sec</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">curvelet_conversion</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>

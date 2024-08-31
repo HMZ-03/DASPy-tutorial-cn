@@ -48,7 +48,8 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="%E5%AE%89%E8%A3%85.html">安装</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">读取数据</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#das">读取DAS数据</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#das">从文件中读取DAS数据</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">从其他包的类实例转换</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#section">Section类</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dasdatetime">DASDateTime类</a></li>
 </ul>
@@ -88,13 +89,58 @@
   <section id="id1">
 <h1>读取数据<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
 <section id="das">
-<h2>读取DAS数据<a class="headerlink" href="#das" title="Permalink to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">read函数</span></code> 用于读取多类型的DAS数据文件，它支持读取.h5、.tdms、.segy/.sgy文件，还支持读取存储为 .pkl文件的 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 类实例（见下）。</p>
+<h2>从文件中读取DAS数据<a class="headerlink" href="#das" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">read函数</span></code> 用于读取多类型的DAS数据文件，支持的所有数据格式见下表：</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>格式</p></th>
+<th class="head"><p>读取</p></th>
+<th class="head"><p>写入</p></th>
+<th class="head"><p>备注</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>HDF5</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>支持OptaSense, Silixa, Febus和智地感知的数据</p></td>
+</tr>
+<tr class="row-odd"><td><p>TDMS</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>支持Silixa和中国科学院半导体研究所的数据</p></td>
+</tr>
+<tr class="row-even"><td><p>SEG-Y</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>支持OptaSens和Silixa的数据</p></td>
+</tr>
+<tr class="row-odd"><td><p>PICKLE</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>以二进制保存的daspy.Section或numpy.ndarray类实例</p></td>
+</tr>
+<tr class="row-even"><td><p>NPY</p></td>
+<td><p>√</p></td>
+<td><p>√</p></td>
+<td><p>以二进制保存的numpy.ndarray类实例</p></td>
+</tr>
+</tbody>
+</table>
 <p>在默认情况下，函数将输出包含数据和元数据的 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 类实例。可设置 <code class="docutils literal notranslate"><span class="pre">output_type='array'</span></code> 以输出数据为 <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> 格式，此时将以 <code class="docutils literal notranslate"><span class="pre">dict</span></code> 格式输出元数据。设置 <code class="docutils literal notranslate"><span class="pre">ch1</span></code> 或/和 <code class="docutils literal notranslate"><span class="pre">ch2</span></code> 可限制读取的信道范围。</p>
 <p>读取示例波形为 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 实例（推荐）或 <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> 和 <code class="docutils literal notranslate"><span class="pre">dict</span></code> ：</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;array&#39;</span><span class="p">,</span> <span class="n">ch1</span><span class="o">=</span><span class="mi">2700</span><span class="p">,</span> <span class="n">ch2</span><span class="o">=</span><span class="mi">2800</span><span class="p">)</span> <span class="c1"># 设置信道范围</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>从其他包的类实例转换<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>DASPy支持数据从 <a class="reference external" href="https://dascore.org/">DASCore</a> 和 <a class="reference external" href="https://docs.obspy.org/">ObsPy</a> 向DASPy流转：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">Section</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_dascore</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_dascore_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span> <span class="c1"># 将dascore.core.patch.Patch实例转换为daspy.section实例</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_obspy</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_obspy_stream</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="c1"># 将obspy.core.stream.Stream实例转换为daspy.section实例</span>
 </pre></div>
 </div>
 </section>
