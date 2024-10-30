@@ -11,6 +11,14 @@ DASPy可以通过Pip、Conda等常用方式安装
 
     pip install git+https://github.com/HMZ-03/DASPy.git
 
+如果通过此方法安装，你可以通过以下命令更新DASPy：
+
+::
+
+    pip install --upgrade git+https://github.com/HMZ-03/DASPy.git
+
+
+
 通过Conda安装
 --------------------
 
@@ -23,6 +31,7 @@ DASPy可以通过Pip、Conda等常用方式安装
 ::
 
     conda update -n base -c conda-forge conda
+
 
 手动安装
 --------------------
