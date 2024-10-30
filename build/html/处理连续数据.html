@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>处理连续数据 &mdash; DASPy中文教程 1.0.0 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="基本数据处理" href="%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html" />
+    <link rel="prev" title="读取数据" href="%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DASPy中文教程
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="%E5%AE%89%E8%A3%85.html">安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE.html">读取数据</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">处理连续数据</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#collection">Collection类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">数据选择</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">连续数据处理</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">基本数据处理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html">可视化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E4%BF%A1%E9%81%93%E5%88%86%E6%9E%90.html">信道分析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%95%B0%E6%8D%AE%E5%8E%BB%E5%99%AA.html">数据去噪</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E6%B3%A2%E5%9C%BA%E5%88%86%E8%A7%A3.html">波场分解</a></li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%BA%94%E5%8F%98-%E9%80%9F%E5%BA%A6%E8%BD%AC%E6%8D%A2.html">应变-速度转换</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DASPy中文教程</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">处理连续数据</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/处理连续数据.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>处理连续数据<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<p>在对连续数据进行如各类滤波、降采样、余弦尖灭、时间微分和积分等连续时间信号的处理时，对单个文件处理再拼接使用会产生数据的不连续。使用 <code class="docutils literal notranslate"><span class="pre">collection</span></code> 类进行连续数据的处理能够解决这些操作的连续性问题。</p>
+<section id="collection">
+<h2>Collection类<a class="headerlink" href="#collection" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Collection</span></code> 类用于存放属于同一次采集的连续数据，它保存连续数据文件路径的列表 <code class="docutils literal notranslate"><span class="pre">flist</span></code> 和每个文件的起始时间 <code class="docutils literal notranslate"><span class="pre">ftime</span></code>，以及该采集的元数据信息，包括信道数 <code class="docutils literal notranslate"><span class="pre">nch</span></code> 、道间距 <code class="docutils literal notranslate"><span class="pre">dx</span></code> 、标距长度 <code class="docutils literal notranslate"><span class="pre">gauge_length</span></code> 、采样率 <code class="docutils literal notranslate"><span class="pre">fs</span></code> 、单个文件的采样点数 <code class="docutils literal notranslate"><span class="pre">nt</span></code> 和单个文件的时长 <code class="docutils literal notranslate"><span class="pre">flength</span></code> 。在初始化一个类实例时，在默认情况下，会读取第二个数据文件的元数据以获取所有元数据信息，并根据第二个数据的开始时间 <code class="docutils literal notranslate"><span class="pre">start_time</span></code> 自动计算每个文件的起始时间 <code class="docutils literal notranslate"><span class="pre">ftime</span></code> ：</p>
+<blockquote>
+<div><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">Collection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s1">&#39;data/*.h5&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span>
+<span class="go">       flist: 2608 files</span>
+<span class="go">              [data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312132304.h5,</span>
+<span class="go">               data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312132305.h5,</span>
+<span class="go">               ...,</span>
+<span class="go">               data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312151831.h5]</span>
+<span class="go">       ftime: 2023-12-13 23:04:00.558582+00:00 to 2023-12-15 18:32:00.558582+00:00</span>
+<span class="go">     flength: 60.0</span>
+<span class="go">         nch: 1956</span>
+<span class="go">          nt: 12000</span>
+<span class="go">          dx: 1.022494912147522</span>
+<span class="go">          fs: 200.0</span>
+<span class="go">gauge_length: 4.0</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>设置 <code class="docutils literal notranslate"><span class="pre">meta_from_file='all'</span></code> 以读取每个文件的元数据，DASPy会检查所有元数据是否一致、数据是否连续，并保存和计算所需的属性。各类元数据也支持直接指定。对于大量的连续数据，该方法非常耗时。</p></li>
+<li><p>设置 <code class="docutils literal notranslate"><span class="pre">timeinfo_format</span></code> 可以从文件名中得到起始时间，并检查连续性并计算 <code class="docutils literal notranslate"><span class="pre">flength</span></code> 。 <code class="docutils literal notranslate"><span class="pre">timeinfo_format='DAS_%Y-%m-%dT%H:%M:%S%z.h5'</span></code> 表示文件名对应的时间， <code class="docutils literal notranslate"><span class="pre">timeinfo_format=(slice(33:45),</span> <span class="pre">'%Y%m%d%H%M%S')</span></code> 表示文件名的切片对应的时间。</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="id2">
+<h2>数据选择<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>从 <code class="docutils literal notranslate"><span class="pre">Collection</span></code> 类中选择某个时间段的数据：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">DASDateTime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">stime</span> <span class="o">=</span> <span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">etime</span><span class="o">=</span><span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+<span class="go">       flist: 61 files</span>
+<span class="go">              [data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312141159.h5,</span>
+<span class="go">               data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312141200.h5,</span>
+<span class="go">               ...,</span>
+<span class="go">               data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312141259.h5]</span>
+<span class="go">       ftime: 2023-12-13 23:04:00.558582+00:00 to 2023-12-15 18:32:00.558582+00:00</span>
+<span class="go">     flength: 60.0</span>
+<span class="go">         nch: 1956</span>
+<span class="go">          nt: 12000</span>
+<span class="go">          dx: 1.022494912147522</span>
+<span class="go">          fs: 200.0</span>
+<span class="go">gauge_length: 4.0</span>
+</pre></div>
+</div>
+<p>设置 <code class="docutils literal notranslate"><span class="pre">readsec=True</span></code> 将直接读取所需时段的数据为 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 类实例并返回。</p>
+</section>
+<section id="id3">
+<h2>连续数据处理<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Collection.process</span></code> 方法能够将所有文件依次读取为 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 类实例，进行所需要的一系列处理后添加后缀并保存至目标目录。该方法会通过缓存滤波器状态等办法来解决数据不连续性。一个将所有数据低通滤波并在时间和空间域都降采样5倍，再进行积分的例子：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">operations</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;downsampling&#39;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">tint</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">xint</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">lowpass_filter</span><span class="o">=</span><span class="kc">True</span><span class="p">)],</span>
+<span class="go">                  [&#39;time_integration&#39;, dict()]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">operations</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="s1">&#39;../processed&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;_pro&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE.html" class="btn btn-neutral float-left" title="读取数据" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html" class="btn btn-neutral float-right" title="基本数据处理" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2024, Minzhe Hu.</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -22,8 +22,10 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="搜索" href="search.html" />
-    <link rel="next" title="基本数据处理" href="%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html" />
-    <link rel="prev" title="安装" href="%E5%AE%89%E8%A3%85.html" /> 
+    <link rel="next" title="处理连续数据" href="%E5%A4%84%E7%90%86%E8%BF%9E%E7%BB%AD%E6%95%B0%E6%8D%AE.html" />
+    <link rel="prev" title="安装" href="%E5%AE%89%E8%A3%85.html" />
+    <link href="_static/style.css" rel="stylesheet" type="text/css">
+
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,11 +51,13 @@
 <li class="toctree-l1"><a class="reference internal" href="%E5%AE%89%E8%A3%85.html">安装</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">读取数据</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#das">从文件中读取DAS数据</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">从其他包的类实例转换</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">自定义读取函数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">从其他包的类实例转换</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#section">Section类</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dasdatetime">DASDateTime类</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="%E5%A4%84%E7%90%86%E8%BF%9E%E7%BB%AD%E6%95%B0%E6%8D%AE.html">处理连续数据</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html">基本数据处理</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E5%8F%AF%E8%A7%86%E5%8C%96.html">可视化</a></li>
 <li class="toctree-l1"><a class="reference internal" href="%E4%BF%A1%E9%81%93%E5%88%86%E6%9E%90.html">信道分析</a></li>
@@ -96,24 +100,24 @@
 <tr class="row-odd"><th class="head"><p>格式</p></th>
 <th class="head"><p>读取</p></th>
 <th class="head"><p>写入</p></th>
-<th class="head"><p>备注</p></th>
+<th class="head"><p>数据来源</p></th>
 </tr>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>HDF5</p></td>
 <td><p>√</p></td>
 <td><p>√</p></td>
-<td><p>支持OptaSense, Silixa, Febus和智地感知的数据</p></td>
+<td><p>OptaSense、Silixa、Febus、AP Sensing、ASN和智地感知</p></td>
 </tr>
 <tr class="row-odd"><td><p>TDMS</p></td>
 <td><p>√</p></td>
 <td><p>√</p></td>
-<td><p>支持Silixa和中国科学院半导体研究所的数据</p></td>
+<td><p>Silixa和中国科学院半导体研究所</p></td>
 </tr>
 <tr class="row-even"><td><p>SEG-Y</p></td>
 <td><p>√</p></td>
 <td><p>√</p></td>
-<td><p>支持OptaSens和Silixa的数据</p></td>
+<td><p>OptaSens and Silixa</p></td>
 </tr>
 <tr class="row-odd"><td><p>PICKLE</p></td>
 <td><p>√</p></td>
@@ -127,20 +131,56 @@
 </tr>
 </tbody>
 </table>
-<p>在默认情况下，函数将输出包含数据和元数据的 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 类实例。可设置 <code class="docutils literal notranslate"><span class="pre">output_type='array'</span></code> 以输出数据为 <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> 格式，此时将以 <code class="docutils literal notranslate"><span class="pre">dict</span></code> 格式输出元数据。设置 <code class="docutils literal notranslate"><span class="pre">ch1</span></code> 或/和 <code class="docutils literal notranslate"><span class="pre">ch2</span></code> 可限制读取的信道范围。</p>
-<p>读取示例波形为 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 实例（推荐）或 <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> 和 <code class="docutils literal notranslate"><span class="pre">dict</span></code> ：</p>
+<p>在默认情况下，函数将输出包含数据和元数据的 <code class="docutils literal notranslate"><span class="pre">Section</span></code> 类实例：</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">read</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;array&#39;</span><span class="p">,</span> <span class="n">ch1</span><span class="o">=</span><span class="mi">2700</span><span class="p">,</span> <span class="n">ch2</span><span class="o">=</span><span class="mi">2800</span><span class="p">)</span> <span class="c1"># 设置信道范围</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">()</span> <span class="c1"># 读取示例波形</span>
+</pre></div>
+</div>
+<p>设置 <code class="docutils literal notranslate"><span class="pre">ch1</span></code> 或/和 <code class="docutils literal notranslate"><span class="pre">ch2</span></code> 可限制读取的信道范围。可设置 <code class="docutils literal notranslate"><span class="pre">output_type='array'</span></code> 以输出数据为 <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code> 格式，此时将以 <code class="docutils literal notranslate"><span class="pre">dict</span></code> 格式输出元数据:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">output_type</span><span class="o">=</span><span class="s1">&#39;array&#39;</span><span class="p">,</span> <span class="n">ch1</span><span class="o">=</span><span class="mi">2700</span><span class="p">,</span> <span class="n">ch2</span><span class="o">=</span><span class="mi">2800</span><span class="p">)</span> <span class="c1"># 设置信道范围</span>
+</pre></div>
+</div>
+<p>在仅需要元数据时，可以设置 <code class="docutils literal notranslate"><span class="pre">headonly=True</span></code> 以节省读取时间，此时返回的数据将是一个与原始数据大小相同的全零数组。当文件名的后缀不能准确指示数据格式时，请设置参数 <code class="docutils literal notranslate"><span class="pre">ftype</span></code> 为’h5’、’tdms’、’segy’等</p>
+</section>
+<section id="id2">
+<h2>自定义读取函数<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>如果DASPy不支持读取你的数据，可以自定义一个读取函数。尽管函数仅输入文件名 <code class="docutils literal notranslate"><span class="pre">fname</span></code> 参数即可完成读取，但我们推荐用户允许函数输入 <code class="docutils literal notranslate"><span class="pre">headonly</span></code> 、 <code class="docutils literal notranslate"><span class="pre">ch1</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ch2</span></code> 参数以保证完全的兼容性：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">DASDateTime</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">read_new_h5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">headonly</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5_file</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">start_channel</span> <span class="o">=</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;channel_start&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">end_channel</span> <span class="o">=</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;channel_end&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">ch1</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ch1&#39;</span><span class="p">,</span> <span class="n">start_channel</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">ch2</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;ch2&#39;</span><span class="p">,</span> <span class="n">end_channel</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="k">if</span> <span class="n">headonly</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">h5_file</span><span class="p">[</span><span class="s1">&#39;raw_data&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="k">else</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>            <span class="n">data</span> <span class="o">=</span> <span class="n">h5_file</span><span class="p">[</span><span class="s1">&#39;raw_data&#39;</span><span class="p">][</span><span class="n">ch1</span><span class="o">-</span><span class="n">start_channel</span><span class="p">:</span><span class="n">ch2</span><span class="o">-</span><span class="n">start_channel</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dx&#39;</span><span class="p">:</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;channel spacing m&#39;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;fs&#39;</span><span class="p">:</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;sampling rate Hz&#39;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;gauge_length&#39;</span><span class="p">:</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;GL m&#39;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;start_channel&#39;</span><span class="p">:</span> <span class="n">start_channel</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">DASDateTime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;starttime&#39;</span><span class="p">],</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S.</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span>                    <span class="s1">&#39;scale&#39;</span><span class="p">:</span> <span class="n">h5_file</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;scale factor to strain&#39;</span><span class="p">]}</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">metadata</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">metadata</span></code> 中所必须的关键字是 <code class="docutils literal notranslate"><span class="pre">dx</span></code> 和 <code class="docutils literal notranslate"><span class="pre">fs</span></code> （若文件元数据中不包含可暂时设置为 <code class="docutils literal notranslate"><span class="pre">None</span></code> ），其余参数可按需读取。之后该读取函数便可作为 <code class="docutils literal notranslate"><span class="pre">ftype</span></code> 参数输入 <code class="docutils literal notranslate"><span class="pre">read</span></code> 函数或用于构建 <code class="docutils literal notranslate"><span class="pre">Collection</span></code> 类（详见 <a class="reference internal" href="%E5%A4%84%E7%90%86%E8%BF%9E%E7%BB%AD%E6%95%B0%E6%8D%AE.html"><span class="doc">处理连续数据</span></a> ）：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="n">read_new_h5</span><span class="p">,</span> <span class="n">headonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coll</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span><span class="s1">&#39;../data/*.h5&#39;</span><span class="p">,</span> <span class="n">ftype</span><span class="o">=</span><span class="n">read_new_h5</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
-<section id="id2">
-<h2>从其他包的类实例转换<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
-<p>DASPy支持数据从 <a class="reference external" href="https://dascore.org/">DASCore</a> 和 <a class="reference external" href="https://docs.obspy.org/">ObsPy</a> 向DASPy流转：</p>
+<section id="id3">
+<h2>从其他包的类实例转换<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<p>DASPy支持数据从 <a class="reference external" href="https://docs.obspy.org/">ObsPy</a> 、 <a class="reference external" href="https://dascore.org/">DASCore</a> 和 <a class="reference external" href="https://github.com/pyrocko/lightguide">lightguide</a> 向DASPy流转：</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">Section</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_dascore</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_dascore_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span> <span class="c1"># 将dascore.core.patch.Patch实例转换为daspy.section实例</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sec_obspy</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_obspy_stream</span><span class="p">(</span><span class="n">st</span><span class="p">)</span> <span class="c1"># 将obspy.core.stream.Stream实例转换为daspy.section实例</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_dascore</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_dascore_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span> <span class="c1"># 将dascore.core.patch.Patch实例转换为daspy.section实例</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_lightguide</span> <span class="o">=</span> <span class="n">Section</span><span class="o">.</span><span class="n">from_lightguide_blast</span><span class="p">(</span><span class="n">blast</span><span class="p">)</span> <span class="c1"># 将lightguide.blast.Blast实例转换为daspy.section实例</span>
 </pre></div>
 </div>
 </section>
@@ -166,18 +206,26 @@
 <h2>DASDateTime类<a class="headerlink" href="#dasdatetime" title="Permalink to this heading"></a></h2>
 <p>DASPy创建了 <code class="docutils literal notranslate"><span class="pre">DASDateTime</span></code> 类，以表示数据的时间信息，包括起始时间 <code class="docutils literal notranslate"><span class="pre">start_time</span></code> 、结束时间 <code class="docutils literal notranslate"><span class="pre">end_time</span></code> 和事件起始时间 <code class="docutils literal notranslate"><span class="pre">origin_time</span></code> 。</p>
 <p><code class="docutils literal notranslate"><span class="pre">DASDateTime</span></code> 是 <code class="docutils literal notranslate"><span class="pre">datetime.DateTime</span></code> 类的子类，继承了 <code class="docutils literal notranslate"><span class="pre">datetime.DateTime</span></code> 的所有方法：</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy.core</span> <span class="kn">import</span> <span class="n">DASDateTime</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">DASDateTime</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s1">&#39;2021-03-19T1:52:23&#39;</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S&#39;</span><span class="p">)</span>
 <span class="go">DASDateTime(2021, 03, 19, 1, 52, 23)</span>
 </pre></div>
 </div>
 <p>DASPy内置有当地时区 <code class="docutils literal notranslate"><span class="pre">local_tz</span></code> 和utc时区 <code class="docutils literal notranslate"><span class="pre">utc</span></code> 用于指定时区：</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy.core.dasdatetime</span> <span class="kn">import</span> <span class="n">utc</span><span class="p">,</span> <span class="n">local_tz</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">daspy</span> <span class="kn">import</span> <span class="n">utc</span><span class="p">,</span> <span class="n">local_tz</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="mi">1616089943</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">utc</span><span class="p">)</span>
 <span class="go">DASDateTime(2021, 3, 18, 17, 52, 23, tzinfo=datetime.timezone.utc)</span>
 </pre></div>
 </div>
 <p>如需使用其他时区可以用 <code class="docutils literal notranslate"><span class="pre">datetime.timezone(datetime.timedelta(hours=h))</span></code> 等方法建立。</p>
+<p>可以使用 <code class="docutils literal notranslate"><span class="pre">local</span></code> 、 <code class="docutils literal notranslate"><span class="pre">utc</span></code> 和 <code class="docutils literal notranslate"><span class="pre">remove_tz</span></code> 方法转换时区或去除时区信息：</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">time</span> <span class="o">=</span> <span class="n">DASDateTime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="s1">&#39;2021-03-19T1:52:23Z&#39;</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S%z&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+<span class="go">DASDateTime(2021, 3, 19, 9, 52, 23, tzinfo=datetime.timezone(datetime.timedelta(seconds=28800)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">remove_tz</span><span class="p">()</span>
+<span class="go">DASDateTime(2021, 3, 19, 1, 52, 23)</span>
+</pre></div>
+</div>
 <p>除了父类本身支持的 <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code> 和 <code class="docutils literal notranslate"><span class="pre">datetime.timedelta</span></code> 之间的加减运算以外， <code class="docutils literal notranslate"><span class="pre">DASDateTime</span></code> 还支持输入数字和可迭代对象 <code class="docutils literal notranslate"><span class="pre">Iterable</span></code> 来计算加和减，所有时间差都以秒（s）为单位表示，并且会自动处理时区未指定的问题：</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">DASDateTime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">100</span>
 <span class="go">DASDateTime(2021, 3, 24, 14, 29, 40)</span>
@@ -202,7 +250,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
         <a href="%E5%AE%89%E8%A3%85.html" class="btn btn-neutral float-left" title="安装" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
-        <a href="%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86.html" class="btn btn-neutral float-right" title="基本数据处理" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="%E5%A4%84%E7%90%86%E8%BF%9E%E7%BB%AD%E6%95%B0%E6%8D%AE.html" class="btn btn-neutral float-right" title="处理连续数据" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

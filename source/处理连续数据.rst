@@ -1,0 +1,61 @@
+处理连续数据
+=============================================
+
+在对连续数据进行如各类滤波、降采样、余弦尖灭、时间微分和积分等连续时间信号的处理时，对单个文件处理再拼接使用会产生数据的不连续。使用 ``collection`` 类进行连续数据的处理能够解决这些操作的连续性问题。
+
+Collection类
+------------------------------
+
+``Collection`` 类用于存放属于同一次采集的连续数据，它保存连续数据文件路径的列表 ``flist`` 和每个文件的起始时间 ``ftime``，以及该采集的元数据信息，包括信道数 ``nch`` 、道间距 ``dx`` 、标距长度 ``gauge_length`` 、采样率 ``fs`` 、单个文件的采样点数 ``nt`` 和单个文件的时长 ``flength`` 。在初始化一个类实例时，在默认情况下，会读取第二个数据文件的元数据以获取所有元数据信息，并根据第二个数据的开始时间 ``start_time`` 自动计算每个文件的起始时间 ``ftime`` ：
+
+    >>> from daspy import Collection
+    >>> coll = Collection('data/*.h5')
+    >>> coll
+           flist: 2608 files
+                  [data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312132304.h5,
+                   data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312132305.h5,
+                   ...,
+                   data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312151831.h5]
+           ftime: 2023-12-13 23:04:00.558582+00:00 to 2023-12-15 18:32:00.558582+00:00
+         flength: 60.0
+             nch: 1956
+              nt: 12000
+              dx: 1.022494912147522
+              fs: 200.0
+    gauge_length: 4.0
+
+ - 设置 ``meta_from_file='all'`` 以读取每个文件的元数据，DASPy会检查所有元数据是否一致、数据是否连续，并保存和计算所需的属性。各类元数据也支持直接指定。对于大量的连续数据，该方法非常耗时。
+ - 设置 ``timeinfo_format`` 可以从文件名中得到起始时间，并检查连续性并计算 ``flength`` 。 ``timeinfo_format='DAS_%Y-%m-%dT%H:%M:%S%z.h5'`` 表示文件名对应的时间， ``timeinfo_format=(slice(33:45), '%Y%m%d%H%M%S')`` 表示文件名的切片对应的时间。
+
+
+数据选择
+------------------------------
+
+从 ``Collection`` 类中选择某个时间段的数据：
+
+    >>> from daspy import DASDateTime
+    >>> coll.select(stime = DASDateTime(2023, 12, 14, 12), etime=DASDateTime(2023, 12, 14, 13))
+           flist: 61 files
+                  [data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312141159.h5,
+                   data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312141200.h5,
+                   ...,
+                   data/TEST_2000m_4m_1_5000Hz_200Hz_UTC8_202312141259.h5]
+           ftime: 2023-12-13 23:04:00.558582+00:00 to 2023-12-15 18:32:00.558582+00:00
+         flength: 60.0
+             nch: 1956
+              nt: 12000
+              dx: 1.022494912147522
+              fs: 200.0
+    gauge_length: 4.0
+
+设置 ``readsec=True`` 将直接读取所需时段的数据为 ``Section`` 类实例并返回。
+
+
+连续数据处理
+------------------------------
+
+``Collection.process`` 方法能够将所有文件依次读取为 ``Section`` 类实例，进行所需要的一系列处理后添加后缀并保存至目标目录。该方法会通过缓存滤波器状态等办法来解决数据不连续性。一个将所有数据低通滤波并在时间和空间域都降采样5倍，再进行积分的例子：
+
+    >>> operations = [['downsampling', dict(tint=5, xint=5, lowpass_filter=True)],
+                      ['time_integration', dict()]]
+    >>> coll.process(operations, savepath='../processed', suffix='_pro')
