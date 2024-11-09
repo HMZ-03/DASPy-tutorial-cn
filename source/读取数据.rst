@@ -59,7 +59,7 @@
     >>>                     'start_distance': (start_channel + ch1) * dx,
     >>>                     'start_time': DASDateTime.strptime(h5_file.attrs['starttime'], '%Y-%m-%dT%H:%M:%S.%f'),
     >>>                     'scale': h5_file.attrs['scale factor to strain']}
-    >>>         return data, metadata
+    >>>     return data, metadata
 
 ``metadata`` 中所必须的关键字是 ``dx`` 和 ``fs`` （若文件元数据中不包含可暂时设置为 ``None`` ），其余参数可按需读取。之后该读取函数便可作为 ``ftype`` 参数输入 ``read`` 函数或用于构建 ``Collection`` 类（详见 :doc:`处理连续数据` ）：
 
