@@ -99,6 +99,10 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/waveform.png"><img alt="_images/waveform.png" src="_images/waveform.png" style="width: 600px;" /></a>
+<p>添加 <code class="docutils literal notranslate"><span class="pre">savefig</span></code> 参数可以直接将图像保存为指定的文件名, <code class="docutils literal notranslate"><span class="pre">dpi</span></code> 参数以设置画布分辨率（每英寸上的点数）</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">savefig</span><span class="o">=</span><span class="s1">&#39;waveform.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>在绘制频域图时，可设置 <code class="docutils literal notranslate"><span class="pre">kwargs_pro</span></code> 参数用于计算频域属性：</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="s1">&#39;fk&#39;</span><span class="p">,</span> <span class="n">kwargs_pro</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">taper</span><span class="o">=</span><span class="p">(</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">),</span> <span class="n">nfft</span><span class="o">=</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">8192</span><span class="p">)))</span> <span class="c1"># 设置二维余弦尖灭的系数为(0.02,0.05)，二维快速傅里叶变换的点数为(1024, 8192)</span>
 </pre></div>

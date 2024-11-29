@@ -16,6 +16,11 @@ DASPy通过 ``Section`` 类方法/函数 ``plot`` 进行图像绘制。
 .. image:: ../media/waveform.png
     :width: 600
 
+添加 ``savefig`` 参数可以直接将图像保存为指定的文件名, ``dpi`` 参数以设置画布分辨率（每英寸上的点数）
+
+    >>> sec.plot(savefig='waveform.png', dpi=400)
+
+
 在绘制频域图时，可设置 ``kwargs_pro`` 参数用于计算频域属性：
 
     >>> sec.plot(obj='fk', kwargs_pro=dict(taper=(0.02, 0.05), nfft=(1024, 8192))) # 设置二维余弦尖灭的系数为(0.02,0.05)，二维快速傅里叶变换的点数为(1024, 8192)
