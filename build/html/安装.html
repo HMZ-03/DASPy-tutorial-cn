@@ -49,9 +49,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">安装</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pip">通过Pip安装（推荐）</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#conda">通过Conda安装</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">手动安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pip">通过Pip安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conda">通过Conda安装</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">或</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">手动安装</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="%E8%AF%BB%E5%8F%96%E6%95%B0%E6%8D%AE.html">读取数据</a></li>
@@ -92,7 +95,12 @@
 <h1>安装<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
 <p>DASPy可以通过Pip、Conda等常用方式安装</p>
 <section id="pip">
-<h2>通过Pip安装（推荐）<a class="headerlink" href="#pip" title="Permalink to this heading"></a></h2>
+<h2>通过Pip安装<a class="headerlink" href="#pip" title="Permalink to this heading"></a></h2>
+<p>从PyPI安装：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">daspy</span><span class="o">-</span><span class="n">toolbox</span>
+</pre></div>
+</div>
+<p>从GitHub安装最新版本：</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">HMZ</span><span class="o">-</span><span class="mi">03</span><span class="o">/</span><span class="n">DASPy</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
@@ -103,16 +111,18 @@
 </section>
 <section id="conda">
 <h2>通过Conda安装<a class="headerlink" href="#conda" title="Permalink to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">hmz</span><span class="o">-</span><span class="mi">03</span> <span class="n">daspy</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">daspy</span><span class="o">-</span><span class="n">toolbox</span>
 </pre></div>
 </div>
-<p>如果收到报错，请尝试：</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">update</span> <span class="o">-</span><span class="n">n</span> <span class="n">base</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">conda</span>
-</pre></div>
-</div>
-</section>
 <section id="id2">
-<h2>手动安装<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<h3>或<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<blockquote>
+<div><p>conda install conda-forge::daspy-toolbox</p>
+</div></blockquote>
+</section>
+</section>
+<section id="id3">
+<h2>手动安装<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>从 <a class="reference external" href="https://github.com/HMZ-03/DASPy?tab=readme-ov-file">Github</a> 克隆或下载DASPy存储库；</p></li>
 <li><p>安装以下依赖包: numpy, scipy &gt;=1.13, matplotlib, geographiclib, pyproj, h5py, segyio, nptdms；</p></li>

@@ -4,19 +4,23 @@
 DASPy可以通过Pip、Conda等常用方式安装
 
 
-通过Pip安装（推荐）
+通过Pip安装
 --------------------
 
+从PyPI安装：
+::
+
+    pip install daspy-toolbox
+
+从GitHub安装最新版本：
 ::
 
     pip install git+https://github.com/HMZ-03/DASPy.git
 
 如果通过此方法安装，你可以通过以下命令更新DASPy：
-
 ::
 
     pip install --upgrade git+https://github.com/HMZ-03/DASPy.git
-
 
 
 通过Conda安装
@@ -24,14 +28,12 @@ DASPy可以通过Pip、Conda等常用方式安装
 
 ::
 
-    conda install -c hmz-03 daspy
+    conda install daspy-toolbox
 
-如果收到报错，请尝试：
-
+或
 ::
 
-    conda update -n base -c conda-forge conda
-
+    conda install conda-forge::daspy-toolbox
 
 手动安装
 --------------------
