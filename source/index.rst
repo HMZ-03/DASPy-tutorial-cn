@@ -3,16 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. |USTC_logo| image:: ../media/USTC.svg
-    :height: 170
-.. |DAMS_logo| image:: ../media/DAMS.png
-    :height: 150
-
+.. |logo| image:: ../media/logo.png
+    :height: 200
 
 DASPy
 =============================================
-|USTC_logo| |DAMS_logo|
-
+|logo|
 
 DASPy是一个开源项目，提供DAS（Distributed Acoustic Sensing，分布式声学传感）数据处理的python包。
 
